@@ -90,9 +90,37 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
     private void postNewTweet(final Tweet newTweet) {
-        Log.d("DEBUG", "newTweet: " + newTweet.toString());
-        arrAdapterTweet.add(newTweet);
-        arrAdapterTweet.setNotifyOnChange(true);
+        //Log.d("DEBUG", "newTweet: " + newTweet.toString());
+        client.postStatus(
+                new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        //super.onSuccess(statusCode, headers, response);
+                        Log.d("INFO", "postNewTweet: " + response.toString());
+                        arrAdapterTweet.add(newTweet);
+                        arrAdapterTweet.setNotifyOnChange(true);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                        //super.onFailure(statusCode, headers, responseString, throwable);
+                        Log.d("ERROR", "postNewTweet Fail 1");
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                        //super.onFailure(statusCode, headers, throwable, errorResponse);
+                        Log.d("ERROR", "postNewTweet Fail 2");
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                        //super.onFailure(statusCode, headers, throwable, errorResponse);
+                        Log.d("ERROR", "postNewTweet Fail 3");
+                    }
+                },
+                newTweet
+        );
     }
 
     private void populateTimeline() {
@@ -109,19 +137,19 @@ public class TimelineActivity extends AppCompatActivity {
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 //super.onFailure(statusCode, headers, responseString, throwable);
-                Log.d("ERROR", "Fail 1");
+                Log.d("ERROR", "populateTimeline Fail 1");
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 //super.onFailure(statusCode, headers, throwable, errorResponse);
-                Log.d("ERROR", "Fail 2");
+                Log.d("ERROR", "populateTimeline Fail 2");
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
                 //super.onFailure(statusCode, headers, throwable, errorResponse);
-                Log.d("ERROR", "Fail 3");
+                Log.d("ERROR", "populateTimeline Fail 3");
             }
         });
     }
