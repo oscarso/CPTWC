@@ -26,29 +26,13 @@ public class TimelineActivity extends AppCompatActivity {
 
 
     private void populateTimeline() {
-        /*
-        new AsyncGetJSONWebData(this).execute(
-                "https://api.twitter.com/1.1/statuses/home_timeline.json?count=25&since_id=1",
-                null);
-        */
 
         client.getHomeTimeline(new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                //super.onSuccess(statusCode, headers, response);
-                Log.d("INFO", "Success 1");
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                //super.onSuccess(statusCode, headers, responseString);
-                Log.d("INFO", "Success 2");
-            }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 //super.onSuccess(statusCode, headers, response);
-                Log.d("INFO", "Success 3");
+                Log.d("INFO", response.toString());
             }
 
             @Override

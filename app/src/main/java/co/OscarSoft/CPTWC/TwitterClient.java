@@ -25,7 +25,7 @@ import com.loopj.android.http.RequestParams;
  */
 public class TwitterClient extends OAuthBaseClient {
     public static final Class<? extends Api> REST_API_CLASS = TwitterApi.class; // Change this
-    public static final String REST_URL = "https://api.twitter.com/1"; // Change this, base API URL
+    public static final String REST_URL = "https://api.twitter.com/1.1"; // Change this, base API URL
     public static final String REST_CONSUMER_KEY = "qd9CbYPMDbpitpmYMYfdM0K16";       // Change this
     public static final String REST_CONSUMER_SECRET = "mHt3yD0kPm5KUAP9TvCyOY9EOdGkyiRKl4TDgSQuCVIy6PmkLv"; // Change this
     public static final String REST_CALLBACK_URL = "oauth://cptwc"; // Change this (here and in manifest)
@@ -50,7 +50,7 @@ public class TwitterClient extends OAuthBaseClient {
 
         params.put("count", 25);
         params.put("since_id", 1);
-        getClient().get(apiurl, null, handler);
+        getClient().get(apiurl, params, handler);
     }
 
 	/* 1. Define the endpoint URL with getApiUrl and pass a relative path to the endpoint
