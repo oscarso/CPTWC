@@ -18,6 +18,14 @@ import co.OscarSoft.CPTWC.models.Tweet;
  * Created by oscarso on 12/13/15.
  */
 public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
+
+    // View lookup cache
+    private static class ViewHolder {
+        ImageView profileImage;
+        TextView userName;
+        TextView body;
+    }
+
     public TweetsArrayAdapter(Context context, List<Tweet> tweets) {
         super(context, 0, tweets);
     }
@@ -26,17 +34,22 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
     public View getView(int position, View convertView, ViewGroup parent) {
         Tweet tweet = getItem(position);
 
+        ViewHolder viewHolder;
         if (convertView == null) {
+            viewHolder = new ViewHolder();
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_tweet, parent, false);
+            viewHolder.profileImage = (ImageView) convertView.findViewById(R.id.ivProfileImage);
+            viewHolder.profileImage.setImageResource(android.R.color.transparent);
+            viewHolder.userName = (TextView) convertView.findViewById(R.id.tvUserName);
+            viewHolder.body = (TextView) convertView.findViewById(R.id.tvBody);
+            convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
         }
-        ImageView ivProfileImage = (ImageView) convertView.findViewById(R.id.ivProfileImage);
-        TextView tvUserName = (TextView) convertView.findViewById(R.id.tvUserName);
-        TextView tvBody = (TextView) convertView.findViewById(R.id.tvBody);
 
-        tvUserName.setText(tweet.getUser().getScreenName());
-        tvBody.setText(tweet.getBody());
-        ivProfileImage.setImageResource(android.R.color.transparent);
-        Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(ivProfileImage);
+        viewHolder.userName.setText(tweet.getUser().getScreenName());
+        viewHolder.body.setText(tweet.getBody());
+        Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(viewHolder.profileImage);
 
         return convertView;
     }
