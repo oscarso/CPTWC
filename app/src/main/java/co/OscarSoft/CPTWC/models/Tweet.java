@@ -16,6 +16,7 @@ public class Tweet {
     private long uid;
     private User user;
     private String createdAt;
+    private String rts;
 
     public static Tweet fromJSON(JSONObject jsonObj) {
         Tweet tweet = new Tweet();
@@ -24,6 +25,7 @@ public class Tweet {
             tweet.uid = jsonObj.getLong("id");
             tweet.createdAt = jsonObj.getString("created_at");
             tweet.user = User.fromJSON(jsonObj.getJSONObject("user"));
+            tweet.rts = "9999m";
         } catch (JSONException je) {
             Log.e("ERROR", je.toString());
         }
@@ -63,6 +65,10 @@ public class Tweet {
         return user;
     }
 
+    public String getRts() {
+        return rts;
+    }
+
     public void setBody(String body) {
         this.body = body;
     }
@@ -77,5 +83,9 @@ public class Tweet {
 
     public void setCreatedAt(String createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public void setRts(String rts) {
+        this.rts = rts;
     }
 }

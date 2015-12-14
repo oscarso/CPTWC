@@ -28,6 +28,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
     // View lookup cache
     private static class ViewHolder {
         ViewHolderUser vhUser;
+        TextView rts; //relative timestamp
         TextView body;
     }
 
@@ -52,6 +53,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
                 Log.d("DEBUG", "viewHolder.vhUser != null");
             }
             viewHolder.body = (TextView) convertView.findViewById(R.id.tvBody);
+            viewHolder.rts = (TextView) convertView.findViewById(R.id.tvRTS);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -60,6 +62,7 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
         Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(viewHolder.vhUser.profileImage);
         viewHolder.vhUser.userName.setText(tweet.getUser().getScreenName());
         viewHolder.body.setText(tweet.getBody());
+        viewHolder.rts.setText(tweet.getRts());
 
         return convertView;
     }
