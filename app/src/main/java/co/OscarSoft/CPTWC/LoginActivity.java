@@ -30,7 +30,7 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
     @Override
     public void onLoginSuccess() {
         Intent i = new Intent(this, TimelineActivity.class);
-        Toast.makeText(this, "onLoginSuccess !", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "onLoginSuccess !", Toast.LENGTH_SHORT).show();
         startActivity(i);
     }
 
@@ -38,7 +38,7 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
     // i.e Display an error dialog or toast
     @Override
     public void onLoginFailure(Exception e) {
-        Toast.makeText(this, "onLoginFailure !", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "onLoginFailure !", Toast.LENGTH_SHORT).show();
         e.printStackTrace();
     }
 

@@ -1,6 +1,9 @@
 package co.OscarSoft.CPTWC;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.widget.Toast;
 
 
 /*
@@ -18,10 +21,20 @@ public class TwitterApplication extends com.activeandroid.app.Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        if (!isNetworkAvailable()) {
+            Toast.makeText(this, "There is no network connectivity !", Toast.LENGTH_SHORT).show();
+        }
         TwitterApplication.context = this;
     }
 
     public static TwitterClient getRestClient() {
         return (TwitterClient) TwitterClient.getInstance(TwitterClient.class, TwitterApplication.context);
+    }
+
+    private Boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
     }
 }
