@@ -3,5 +3,6 @@
 
     <string name="app_name">CPTWC</string>
     <string name="login_label">Connect with Twitter</string>
+    <string name="title_activity_timeline">Timeline</string>
 
 </resources>
