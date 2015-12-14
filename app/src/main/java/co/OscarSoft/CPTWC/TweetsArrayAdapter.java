@@ -1,6 +1,7 @@
 package co.OscarSoft.CPTWC;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +20,14 @@ import co.OscarSoft.CPTWC.models.Tweet;
  */
 public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
 
-    // View lookup cache
-    private static class ViewHolder {
+    private static class ViewHolderUser {
         ImageView profileImage;
         TextView userName;
+    }
+
+    // View lookup cache
+    private static class ViewHolder {
+        ViewHolderUser vhUser;
         TextView body;
     }
 
@@ -33,23 +38,28 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Tweet tweet = getItem(position);
-
         ViewHolder viewHolder;
+
         if (convertView == null) {
             viewHolder = new ViewHolder();
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_tweet, parent, false);
-            viewHolder.profileImage = (ImageView) convertView.findViewById(R.id.ivProfileImage);
-            viewHolder.profileImage.setImageResource(android.R.color.transparent);
-            viewHolder.userName = (TextView) convertView.findViewById(R.id.tvUserName);
+            if (viewHolder.vhUser == null) {
+                viewHolder.vhUser = new ViewHolderUser();
+                viewHolder.vhUser.profileImage = (ImageView) convertView.findViewById(R.id.ivProfileImage);
+                viewHolder.vhUser.profileImage.setImageResource(android.R.color.transparent);
+                viewHolder.vhUser.userName = (TextView) convertView.findViewById(R.id.tvUserName);
+            } else {
+                Log.d("DEBUG", "viewHolder.vhUser != null");
+            }
             viewHolder.body = (TextView) convertView.findViewById(R.id.tvBody);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        viewHolder.userName.setText(tweet.getUser().getScreenName());
+        Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(viewHolder.vhUser.profileImage);
+        viewHolder.vhUser.userName.setText(tweet.getUser().getScreenName());
         viewHolder.body.setText(tweet.getBody());
-        Picasso.with(getContext()).load(tweet.getUser().getProfileImageUrl()).into(viewHolder.profileImage);
 
         return convertView;
     }

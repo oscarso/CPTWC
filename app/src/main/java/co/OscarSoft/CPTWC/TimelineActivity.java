@@ -1,5 +1,7 @@
 package co.OscarSoft.CPTWC;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -20,9 +22,11 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import co.OscarSoft.CPTWC.models.Tweet;
+import co.OscarSoft.CPTWC.models.User;
 
 public class TimelineActivity extends AppCompatActivity {
 
+    private static final int ACTIVITY_REQ_CODE = 1234;
     private TwitterClient client;
     private ArrayList<Tweet> arrListTweet;
     private TweetsArrayAdapter arrAdapterTweet;
@@ -54,13 +58,45 @@ public class TimelineActivity extends AppCompatActivity {
 
     public void onComposeAction(MenuItem mi) {
         // handle click here
-        Log.d("DEBUG", "onComposeAction");
+        //Log.d("DEBUG", "onComposeAction");
+        Intent i = new Intent(TimelineActivity.this, ComposeActivity.class);
+        startActivityForResult(i, ACTIVITY_REQ_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == ACTIVITY_REQ_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                User user;
+                if (User.getUser() != null) {
+                    user = User.getUser();//use cache copy
+                } else {
+                    user = new User();//set dummy
+                    user.setUid(0);
+                    user.setName("no_name_yet");
+                    user.setProfileImageUrl("no_profile_yet");
+                    user.setScreenName("no_screenname_yet");
+                }
+                Tweet newTweet = new Tweet();
+                newTweet.setUid(user.getUid());
+                newTweet.setUser(user);
+                newTweet.setCreatedAt("no_time_yet");
+                newTweet.setBody(data.getStringExtra(ComposeActivity.L_NEW_TWEET));
+                postNewTweet(newTweet);
+            } else {
+                String doNothing = "";
+            }
+        }
+    }
+
+    private void postNewTweet(final Tweet newTweet) {
+        Log.d("DEBUG", "newTweet: " + newTweet.toString());
+        arrAdapterTweet.add(newTweet);
+        arrAdapterTweet.setNotifyOnChange(true);
     }
 
     private void populateTimeline() {
-
         client.getHomeTimeline(new JsonHttpResponseHandler() {
-
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 //super.onSuccess(statusCode, headers, response);
@@ -89,5 +125,4 @@ public class TimelineActivity extends AppCompatActivity {
             }
         });
     }
-
 }
