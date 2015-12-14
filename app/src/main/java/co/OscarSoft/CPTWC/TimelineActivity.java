@@ -1,8 +1,12 @@
 package co.OscarSoft.CPTWC;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 import android.widget.ListView;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -14,7 +18,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import co.OscarSoft.CPTWC.models.Tweet;
-
 
 public class TimelineActivity extends AppCompatActivity {
 
@@ -28,6 +31,9 @@ public class TimelineActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         lvTweets = (ListView) findViewById(R.id.lvTweets);
         arrListTweet = new ArrayList<>();
         arrAdapterTweet = new TweetsArrayAdapter(this, arrListTweet);
@@ -36,7 +42,6 @@ public class TimelineActivity extends AppCompatActivity {
         client = TwitterApplication.getRestClient();
         populateTimeline();
     }
-
 
     private void populateTimeline() {
 
