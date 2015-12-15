@@ -80,7 +80,8 @@ public class TimelineActivity extends AppCompatActivity {
                 Tweet newTweet = new Tweet();
                 newTweet.setUid(user.getUid());
                 newTweet.setUser(user);
-                newTweet.setCreatedAt("no_time_yet");
+                newTweet.setCreatedAt(null);
+                newTweet.setRts(null);
                 newTweet.setBody(data.getStringExtra(ComposeActivity.L_NEW_TWEET));
                 postNewTweet(newTweet);
             } else {

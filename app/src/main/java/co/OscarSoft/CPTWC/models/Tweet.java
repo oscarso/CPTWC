@@ -1,12 +1,17 @@
 package co.OscarSoft.CPTWC.models;
 
+import android.text.format.DateUtils;
 import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by oscarso on 12/13/15.
@@ -25,11 +30,32 @@ public class Tweet {
             tweet.uid = jsonObj.getLong("id");
             tweet.createdAt = jsonObj.getString("created_at");
             tweet.user = User.fromJSON(jsonObj.getJSONObject("user"));
-            tweet.rts = "9999m";
+            tweet.rts = getRelativeTimeAgo(tweet.createdAt);
         } catch (JSONException je) {
             Log.e("ERROR", je.toString());
         }
         return tweet;
+    }
+
+    public String getJsonDateNow() {
+            return (new Date()).toString();
+    }
+
+    public static String getRelativeTimeAgo(String rawJsonDate) {
+        Log.d("DEBUG", "rawJsonDate: " + rawJsonDate);
+        String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
+        SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
+        sf.setLenient(true);
+
+        String relativeDate = "";
+        try {
+            long dateMillis = sf.parse(rawJsonDate).getTime();
+            relativeDate = DateUtils.getRelativeTimeSpanString(dateMillis,
+                    System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return relativeDate;
     }
 
     public static ArrayList<Tweet> fromJSONArray(JSONArray jsonArray) {
@@ -82,10 +108,18 @@ public class Tweet {
     }
 
     public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
+        if (createdAt != null) {
+            this.createdAt = createdAt;
+        } else {
+            this.createdAt = getJsonDateNow();
+        }
     }
 
     public void setRts(String rts) {
-        this.rts = rts;
+        if (rts != null) {
+            this.rts = rts;
+        } else {
+            this.rts = Tweet.getRelativeTimeAgo(this.createdAt);
+        }
     }
 }
